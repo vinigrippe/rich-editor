@@ -1,0 +1,19 @@
+.editor {
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.editor * {
+  all: unset;
+}
+
+.editor [data-type="insert"] {
+  background-color: #e6ffe6;
+  color: #006600;
+}
+
+.editor [data-type="delete"] {
+  background-color: #ffe6e6;
+  color: #990000;
+}

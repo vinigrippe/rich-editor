@@ -20,7 +20,7 @@ export const handleOnKeyDown = (
   editorElement: HTMLElement
 ) => {
   const elementOnFocus = getElementAtCaret();
-  let { range } = getSelection();
+  let { selection, range } = getSelection();
 
   if (
     isKeyCodeValid(event.which, keycodes.letters) ||
@@ -32,17 +32,44 @@ export const handleOnKeyDown = (
     event.code === "Backspace" ||
     event.code === "Space"
   ) {
-    if (elementOnFocus && elementOnFocus.nodeName !== "SPAN") {
-      let char = event.key;
-      let newInsertion = handleCreateInsertion({
-        content: char,
-      });
-      range?.insertNode(newInsertion);
-    } else {
-      const span = elementOnFocus as HTMLSpanElement;
-      const { type, author } = span.dataset;
+    if (elementOnFocus?.nodeName !== "SPAN") {
+      if (event.code === "Backspace") {
+        event.preventDefault();
 
-      console.log(span);
+        if (selection && range) {
+          if (range.startOffset !== 0) {
+            const charRange = range.cloneRange();
+            charRange.setStart(range.startContainer, range.startOffset - 1);
+            const char = charRange.toString();
+
+            charRange.deleteContents();
+            let newInsertion = handleCreateInsertion({
+              content: char,
+              type: "delete",
+              editable: false,
+            });
+            range?.insertNode(newInsertion);
+
+            selection.removeAllRanges();
+            selection.addRange(range);
+            range.setEndAfter(newInsertion);
+          }
+        }
+      } else if (event.code === "Delete") {
+        event.preventDefault();
+        //do same as backspace but to the right (delete key) instead of left (backspace key)
+      } else {
+        let char = event.key;
+        let newInsertion = handleCreateInsertion({
+          content: char,
+          type: "insert",
+          editable: true,
+        });
+        range?.insertNode(newInsertion);
+      }
+    } else {
+      const span = elementOnFocus as HTMLElement;
+      const { type, author } = span.dataset;
     }
   } else if (!isKeyCodeValid(event.which, keycodes.arrows)) {
     event.preventDefault();

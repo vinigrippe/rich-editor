@@ -8,13 +8,22 @@ export const createRandomId = () => {
   return String(randomNumber + dateParse);
 };
 
-export const handleCreateInsertion = ({ content }: { content: string }) => {
+export const handleCreateInsertion = ({
+  content,
+  type,
+  editable,
+}: {
+  content: string;
+  type: "insert" | "delete";
+  editable: boolean;
+}) => {
   const id = createRandomId();
   const span = document.createElement("span");
   span.setAttribute("data-id", id);
-  span.setAttribute("data-type", "insert");
+  span.setAttribute("data-type", type);
   span.setAttribute("data-author", authorId.toString());
   span.setAttribute("data-time", new Date().toISOString());
+  span.setAttribute("contentEditable", editable ? "true" : "false");
 
   span.innerHTML = content;
 

@@ -2,10 +2,7 @@
   padding: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-.editor * {
-  all: unset;
+  outline: none;
 }
 
 .editor [data-type="insert"] {

@@ -6,7 +6,7 @@ import { handleOnKeyDown } from "../services/events";
 interface Props {}
 
 const Editor: React.FC<Props> = () => {
-  const defaultContent = "";
+  const defaultContent = "This is a default content";
   const [content, setContent] = React.useState("");
   const editorElement = React.useRef<HTMLDivElement>(null);
 
